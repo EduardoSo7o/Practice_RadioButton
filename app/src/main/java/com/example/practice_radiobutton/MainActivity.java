@@ -55,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 } else if (radioButtonMul.isChecked()) {
                     result = value1 * value2;
                 } else if (radioButtonDiv.isChecked()) {
-                    result = value1 / value2;
+                    if(value2 != 0) {
+                        result = value1 / value2;
+                    }else {
+                        throw new DividedByZeroException();
+                    }
                 } else {
                     throw new NonOperationSelectedException();
                 }
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Select an operation!", Toast.LENGTH_SHORT).show();
         } catch (NonNumberTyped nonNumberTyped) {
             Toast.makeText(this, "Type both numbers", Toast.LENGTH_SHORT).show();
+        } catch (DividedByZeroException e) {
+            Toast.makeText(this, "Can't divide by 0", Toast.LENGTH_SHORT).show();
         }
     }
 }
