@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.example.practice_radiobutton.exceptions.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,20 +35,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void calculate(View view){
-        int value1 = Integer.parseInt(editText1.getText().toString());
-        int value2 = Integer.parseInt(editText2.getText().toString());
-        int result;
+        try {
+            String value1_String = editText1.getText().toString();
+            String value2_String = editText2.getText().toString();
 
-        if(radioButtonAdd.isChecked()){
-            result = value1 +value2;
-        }else if(radioButtonSub.isChecked()){
-            result = value1 - value2;
-        }else if(radioButtonMul.isChecked()){
-            result = value1 * value2;
-        }else{
-            result = value1 / value2;
+            if(value1_String.equals("") || value2_String.equals("")){
+                throw new NonNumberTyped();
+            }
+
+            int value1 = Integer.parseInt(value1_String);
+            int value2 = Integer.parseInt(value2_String);
+            int result;
+
+            if (value1 != value2) {
+                if (radioButtonAdd.isChecked()) {
+                    result = value1 + value2;
+                } else if (radioButtonSub.isChecked()) {
+                    result = value1 - value2;
+                } else if (radioButtonMul.isChecked()) {
+                    result = value1 * value2;
+                } else if (radioButtonDiv.isChecked()) {
+                    result = value1 / value2;
+                } else {
+                    throw new NonOperationSelectedException();
+                }
+
+                textViewResult.setText(String.valueOf(result));
+            } else {
+                Toast.makeText(this, "Values mustn't be equals", Toast.LENGTH_SHORT).show();
+            }
+        } catch (NonOperationSelectedException e) {
+            Toast.makeText(this, "Select an operation!", Toast.LENGTH_SHORT).show();
+        } catch (NonNumberTyped nonNumberTyped) {
+            Toast.makeText(this, "Type both numbers", Toast.LENGTH_SHORT).show();
         }
-
-        textViewResult.setText(String.valueOf(result));
     }
 }
